@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CadastroClienteComponent } from './components/cadastro-cliente/cadastro-cliente.component';
 
 @Component({
   selector: 'app-root',
