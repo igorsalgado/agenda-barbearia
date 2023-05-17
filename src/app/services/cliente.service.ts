@@ -22,6 +22,10 @@ export class ClienteService {
     return this.http.get(`${this.baseUrl}/clientes/cadastrados/${nome}`);
   }
 
+  public buscarClientePorTelefone(telefone: String) {
+    return this.http.get(`${this.baseUrl}/clientes/cadastrados/telefone/${telefone}`);
+  }
+
   public criarCliente(cliente: any) {
     return this.http.post(`${this.baseUrl}/clientes`, cliente);
   }
