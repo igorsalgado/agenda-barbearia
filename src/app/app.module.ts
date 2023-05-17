@@ -9,11 +9,13 @@ import { AppComponent } from './app.component';
 import { CadastroClienteComponent } from './components/cadastro-cliente/cadastro-cliente.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CadastroClienteComponent,
+    HomePageComponent,
+    CadastroClienteComponent,    
 
   ],
   imports: [
