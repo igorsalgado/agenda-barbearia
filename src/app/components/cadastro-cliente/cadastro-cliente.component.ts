@@ -18,7 +18,7 @@ export class CadastroClienteComponent {
 
   criarCliente() {
     this.ClienteService.criarCliente(this.cliente).subscribe((cliente: any) => {
-      this.router.navigate(['/cadastro-cliente']);
+      this.router.navigate(['/home-page']);
     });
   }
 

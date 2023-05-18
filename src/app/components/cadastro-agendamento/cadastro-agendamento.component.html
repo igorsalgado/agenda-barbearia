@@ -1,1 +1,17 @@
-<p>cadastro-agendamento works!</p>
+<form>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Telefone" [(ngModel)]="agendamento.cliente" (blur)="buscarClientes(agendamento.cliente)" name="telefone" required>
+  </div>
+  <div class="form-group">
+    <select class="form-control" [(ngModel)]="agendamento.barbeiroId" name="barbeiros">
+      <option value="">Selecione um barbeiro</option>
+      <option *ngFor="let barbeiro of agendamento.barbeiro" [value]="barbeiro.id">
+        {{ barbeiro.nome }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <input type="datetime-local" class="form-control" placeholder="Data do agendamento" [(ngModel)]="agendamento.dataAgendamento" name="data" required>
+  </div>
+  <button class="btn btn-success btn-create-appointment" (click)="criarAgendamento()">Agendar</button>
+</form>
