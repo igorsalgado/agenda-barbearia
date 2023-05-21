@@ -8,68 +8,87 @@ import { Observable, Observer } from 'rxjs';
 @Component({
   selector: 'app-cadastro-agendamento',
   templateUrl: './cadastro-agendamento.component.html',
-  styleUrls: ['./cadastro-agendamento.component.css']
+  styleUrls: ['./cadastro-agendamento.component.css'],
 })
 export class CadastroAgendamentoComponent {
-
   agendamento: any = {
     cliente: '',
     barbeiro: '',
     dataAgendamento: '',
   };
 
+  telefoneCliente: string = '';
+
+  barbeiros: any[] = []; 
+
   constructor(
     private clienteService: ClienteService,
     private barbeiroService: BarbeiroService,
-    private agendamentoService: AgendamentoService, 
-    private router: Router) { }
+    private agendamentoService: AgendamentoService,
+    private router: Router
+  ) {}
 
-    ngOnInit() {
-      this.buscarBarbeiros();
-    }
-      
-    buscarClientes(telefone: string) {
-      this.clienteService.buscarClientePorTelefone(telefone).subscribe(
-      {
+  ngOnInit() {
+    this.getBarbeiros();
+  }
+
+  buscarClientesPorTelefone() {
+    this.clienteService
+      .buscarClientePorTelefone(this.telefoneCliente)
+      .subscribe({
         next: (cliente: any) => {
           if (cliente.length > 0) {
             this.agendamento.cliente = cliente[0];
+            console.log('Cliente encontrado:', this.agendamento.cliente);
           } else {
             console.log('Cliente não encontrado');
           }
         },
         error: (error: any) => {
           console.log('Erro ao buscar o cliente: ', error);
-        }
-      }
-    );
+        },
+      });
   }
 
-  buscarBarbeiros() {
-    this.barbeiroService.getBarbeiros().subscribe(
-      {
+  getBarbeiros() {
+    return this.barbeiroService.getBarbeiros().subscribe({
       next: (barbeiros: any) => {
-        this.agendamento.barbeiro = barbeiros.map((barbeiro: any) => ({ id: barbeiro._id, nome: barbeiro.nome }));
+        this.barbeiros = barbeiros;
+        console.log('Barbeiros: ', this.barbeiros);
       },
       error: (error: any) => {
-        console.log('Erro ao buscar barbeiros: ', error);
+        console.log('Erro ao buscar os barbeiros: ', error);
       }
-    }
-    );
+    });
   }
-  
-  criarAgendamento() {
-      const barbeiroSelecionado = this.agendamento.barbeiro.find((barbeiro: any) => barbeiro.nome === this.agendamento.barbeiro);
-      this.agendamento.barbeiro = barbeiroSelecionado;
 
-      this.agendamentoService.criarAgendamento(this.agendamento).subscribe({
-        next: (agendamento: any) => {
-          console.log('Agendamento criado com sucesso: ', agendamento);
-          this.router.navigate(['/home-page']);
-        },
-        error: (error: any) => {
-          console.log('Erro ao criar agendamento: ', error);
-        }
-      });
+  buscarBarbeiroPorNome(nomeBarbeiro: string) {
+    const barbeiroSelecionado = this.barbeiros.find(barbeiro => barbeiro.nome === nomeBarbeiro);
+    if (barbeiroSelecionado) {
+      this.agendamento.barbeiro = barbeiroSelecionado;
+      console.log('Barbeiro encontrado: ', this.agendamento.barbeiro);
+    } else {
+      console.log('Barbeiro não encontrado');
+    }
+  }
+
+  criarAgendamento() {
+
+    if(this.agendamento.cliente == '' || this.agendamento.barbeiro == ''){
+      alert('Cliente ou Barbeiro não encontrado');
+      return;
+    }
+    console.log('Cliente: ', this.agendamento.cliente);
+    console.log('Barbeiro: ', this.agendamento.barbeiro);
+    console.log('Data: ', this.agendamento.dataAgendamento);
+
+    this.agendamentoService.criarAgendamento(this.agendamento).subscribe({
+      next: (agendamento: any) => {
+        console.log('Agendamento criado com sucesso: ', agendamento);
+      },
+      error: (error: any) => {
+        console.log('Erro ao criar o agendamento: ', error);
+      },
+    });
   }
 }
